@@ -1,0 +1,1 @@
+<?php /**PATH C:\Xampp\htdocs\money_transfer\resources\views/website/hot_home_ajax_product.blade.php ENDPATH**/ ?>
