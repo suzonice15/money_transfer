@@ -21,10 +21,8 @@
                 <th>Phone</th>
                 <th>City</th>
                 <th>Product</th>
-                <th>Vendor</th>
-                <th>Created By</th>
-                <th>Order Owner</th>
-                <th>Amount</th>
+                 <th>Created By</th>
+                 <th>Amount</th>
 
                 <th>Status</th>
                <th>Order Date</th>

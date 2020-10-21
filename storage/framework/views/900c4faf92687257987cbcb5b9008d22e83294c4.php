@@ -35,11 +35,6 @@
     <?=($item['qty'])?>
 </a>
                 <br>
-
-
-
-
-
                 <?php
                         }
                     }
@@ -52,86 +47,21 @@
             </td>
 
 
-            <td><?php
-
-                $order_items = unserialize($order->products);
-
-                if(is_array($order_items['items'])) {
-                foreach ($order_items['items'] as $product_id => $item) {
-
-                $product = single_product_information($product_id);
-                $vendor_id=$product->vendor_id;
-                if($vendor_id==0){
-                   $owner=" Sohojbuy Product";
-                } else {
-              $vendor_result= DB::table('vendor')->where('vendor_id',$vendor_id)->first();
-              }
-
-                ?>
-
-                <?php
-                if($vendor_id==0){
-
-                    ?>
-
-                    <span class="btn btn-success"><?php echo $owner; ?></span>
-
-              <?php  }  else {
-
-
-                ?>
-                <a  target="_blank" href="<?php echo e(URL::to('/admin/vendor/view'.'/'.$vendor_id)); ?>">
-                    <span class="btn btn-primary"><?php echo $vendor_result->vendor_f_name; ?></span>
-                </a>
-                <br>
-                <?php } ?>
-
-
-
-
-
-                <?php
-                }
-                }
-
-
-                ?>
-
-
-
-            </td>
 
 
             <td><?php echo e($order->created_by); ?></td>
-            <td><?php echo $affite_user ?></td>
-            <td> <?php echo '৳ ' . number_format($order->order_total, 2); ?>
+             <td> <?php echo '৳ ' . number_format($order->order_total, 2); ?>
                 </td>
 
             <td>
-                <?php if($order->order_status=='pending_payment'){
+                <?php if($order->order_status=='paid'){
                     ?>
 
-                <span   style="background-color:yellow"><?php echo e($order->order_status); ?></span>
-                <?php  } elseif ($order->order_status=='new') { ?>
-                    <span   class="btn btn-info"><?php echo e($order->order_status); ?></span>
-
-                <?php  } elseif ($order->order_status=='processing') { ?>
-                    <span   class="btn btn-info"><?php echo e($order->order_status); ?></span>
-
-                <?php  } elseif ($order->order_status=='on_courier') { ?>
-
-                    <span   class="btn btn-danger"><?php echo e($order->order_status); ?></span>
-                <?php  } elseif ($order->order_status=='delivered') { ?>
                     <span   class="btn btn-success"><?php echo e($order->order_status); ?></span>
 
-                <?php  } elseif ($order->order_status=='refund') { ?>
+                <?php  }  else {  ?>
 
                     <span   class="btn btn-danger"><?php echo e($order->order_status); ?></span>
-                <?php  } elseif ($order->order_status=='cancled') { ?>
-                    <span   class="btn btn-danger"><?php echo e($order->order_status); ?></span>
-                <?php } else {  ?>
-
-                    <span   class="btn btn-success"><?php echo e($order->order_status); ?></span>
                 <?php } ?>
 
 
@@ -139,9 +69,22 @@
             <td><?php echo e(date('d-F-Y H:i:s a',strtotime($order->created_time))); ?></td>
 
             <td>
+
+                <?php if($order->order_status=='new'){ ?>
                 <a title="edit" href="<?php echo e(url('admin/order')); ?>/<?php echo e($order->order_id); ?>">
                     <span class="glyphicon glyphicon-edit btn btn-success"></span>
                 </a>
+                <a title="edit" href="<?php echo e(url('admin/order/cancel')); ?>/<?php echo e($order->order_id); ?>/<?php echo e($order->user_id); ?>/<?php echo e($order->order_total); ?>">
+                    <span class="glyphicon glyphicon-trash btn btn-danger">Cancel</span>
+                </a>
+                <a title="edit" href="<?php echo e(url('admin/order/paid')); ?>/<?php echo e($order->order_id); ?>/<?php echo e($order->user_id); ?>/<?php echo e($order->order_total); ?>">
+                    <span class="glyphicon glyphicon-minus btn btn-info">Paid</span>
+                </a>
+                    <?php } else { ?>
+                    <a title="edit" href="<?php echo e(url('admin/order')); ?>/<?php echo e($order->order_id); ?>">
+                        <span class="glyphicon glyphicon-edit btn btn-success"></span>
+                    </a>
+                    <?php } ?>
 
                 
                     

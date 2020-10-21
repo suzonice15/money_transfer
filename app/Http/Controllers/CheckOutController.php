@@ -44,73 +44,12 @@ class CheckOutController extends Controller
         $data['staff_id'] = 0;
          $data['payment_type'] = $request->payment_type;
         $data['order_area'] = $request->order_area;
-        //// $customer_name = $data['customer_name'];
-        // $customer_email = $data['customer_email'];
-        // $site_title = get_option('site_title');
-        // $site_email = get_option('email');
 
 
-        $get_cookies= Cookie::get('unique_code');
-        $get_link_id= Cookie::get('link_id');
-
-
-
-
-        // $get_link_id = $this->input->cookie('link_id', true);
-        if ($get_cookies) {
-
-            $result=DB::table('product_hit_count')->select('user_id')->where('unique_number',$get_cookies)->first();
-
-
-             $set_user_id = $result->user_id;
-
-
-        }
-       else {
-            $set_user_id =0;
-
-        }
-        $data['user_id'] = $set_user_id;
-
-
+        $data['user_id'] = 0;
         $order_id=DB::table('order_data')->insertGetId($data);
-
-
         $row_data['order_id']= $order_id;
-
-
-
-        if ($order_id) {
-
-            $product_ids = $request->product_id;
-
-                if($get_cookies) {
-
-
-                    foreach ($product_ids as $key => $prod) {
-                        $data_product['order_id'] = $order_id;
-                        $data_product['product_id'] = $prod;
-                        $data_product['user_id'] = $set_user_id;
-                        $data_product['link_id'] = $get_link_id;
-                        $data_product['order_date'] = date('Y-m-d');
-                      //  $this->MainModel->insertData('user_order_count', $dataa);
-                        DB::table('user_order_count')->insertGetId($data_product);
-                    }
-                }
-
-
-
-
-
-
-            foreach ($product_ids as $product_id){
-                $product_row = single_product_information($product_id);
-              $row_data['vendor_id']= $product_row->vendor_id;
-              $row_data['product_id']= $product_id;
-              $row_data['order_date']=  $data['order_date'] ;
-               DB::table('vendor_orders')->insertGetId($row_data);
-            }
-
+        if($order_id){
 
             return  redirect('thank-you?order_id='.$order_id);
         } else {

@@ -159,6 +159,57 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+
+    public function paid($order_id,$user_id,$amount)
+    {
+
+$data['order_status']='paid';
+
+        DB::table('order_data')->where('order_id',$order_id)->update($data);
+        $single_result = DB::table('users')->where('id', $user_id)->first();
+        $user_data['wallet'] = $single_result->wallet - $amount;
+        $result = DB::table('users')->where('id', $user_id)->update($user_data);
+
+        $row_data['amount'] = $amount;
+        $row_data['user_id'] = $user_id;
+        $row_data['status'] = 0;
+        $row_data['admin_id'] = Session::get('id');
+        $order_data = DB::table('transaction_history')->insert($row_data);
+
+        if ($order_data) {
+
+            return  redirect('admin/orders')
+                ->with('success', 'Updated successfully.');
+        } else {
+
+            return redirect('admin/order/'.$order_id)
+                ->with('success', 'Error to update this order');
+        }
+
+    }
+
+
+    public function cancel($order_id,$user_id,$amount)
+    {
+
+        $data['order_status']='cancel';
+
+        $order_data=   DB::table('order_data')->where('order_id',$order_id)->update($data);
+
+        if ($order_data) {
+
+            return  redirect('admin/orders')
+                ->with('success', 'Cancel successfully.');
+        } else {
+
+            return redirect('admin/order/'.$order_id)
+                ->with('success', 'Error to update this order');
+        }
+
+    }
+
+
     public function edit($id)
     {
         $user_id=AdminHelper::Admin_user_autherntication();

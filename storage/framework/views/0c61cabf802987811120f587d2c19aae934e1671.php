@@ -1,8 +1,7 @@
-@extends('layouts.master')
-@section('pageTitle')
+<?php $__env->startSection('pageTitle'); ?>
     Order Update Page
-@endsection
-@section('mainContent')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('mainContent'); ?>
     <style>
         .has-error {
             border-color: red;
@@ -14,10 +13,10 @@
         <div class="col-sm-offset-0 col-md-12">
 
 
-            <form name="product" action="{{ url('admin/order/update') }}/{{ $order->order_id }}" class="form-horizontal"
+            <form name="product" action="<?php echo e(url('admin/order/update')); ?>/<?php echo e($order->order_id); ?>" class="form-horizontal"
                   method="post"
                   enctype="multipart/form-data">
-                @csrf
+                <?php echo csrf_field(); ?>
 
 
                 <div class="box-body">
@@ -45,7 +44,8 @@
                                             <td>
 
 
-                                                {{date('d-F-Y h:i:s a',strtotime($order->created_time))}}
+                                                <?php echo e(date('d-F-Y h:i:s a',strtotime($order->created_time))); ?>
+
 
 
                                             </td>
@@ -127,15 +127,15 @@
                                             <select name="courier_service" id="courier_service"
                                                     class="form-control select2">
                                                 <option value="">Select Courier</option>
-                                                @foreach($couriers as $courier):
+                                                <?php $__currentLoopData = $couriers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $courier): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>:
 
                                                 <option
-                                                    value="{{ $courier->courier_id }}">{{ $courier->courier_name }} <?php if ($courier->courier_status == 1) {
+                                                    value="<?php echo e($courier->courier_id); ?>"><?php echo e($courier->courier_name); ?> <?php if ($courier->courier_status == 1) {
                                                         echo " -Inside Dhaka";
                                                     } else {
                                                         echo " -Outside Dhaka";
                                                     }?></option>
-                                                @endforeach
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                                             </select>
                                         </div>
@@ -191,7 +191,7 @@
                                                 <label> Order Created By</label>
 
                                                 <br/>
-                                                <b>{{$order->created_by}}</b>
+                                                <b><?php echo e($order->created_by); ?></b>
 
                                             </div>
                                         </div>
@@ -275,8 +275,8 @@
 
                                                                               <tr>
                               													<td><a target="_blank"
-                                                                                       href="{{url('product')}}/{{$name}}"><?php $name = (isset($item['name']) ? $item['name'] : null);echo $name; ?></a></td>
-                              														<td>{{  $sku }}</td>
+                                                                                       href="<?php echo e(url('product')); ?>/<?php echo e($name); ?>"><?php $name = (isset($item['name']) ? $item['name'] : null);echo $name; ?></a></td>
+                              														<td><?php echo e($sku); ?></td>
                               														<td class="image text-center">
                               														<img
                                                                                         src="<?php echo $featured_image ?>"
@@ -353,7 +353,7 @@
 
 
                                                     ?>
-                                                    <option value="{{$product->product_id}}"
+                                                    <option value="<?php echo e($product->product_id); ?>"
 
                                                     <?php foreach ($product_id_select as $key => $prod) {
 
@@ -365,7 +365,7 @@
 
                                                     }?>
 
-                                                    >{{$product_title}} - {{$product->sku}}</option>
+                                                    ><?php echo e($product_title); ?> - <?php echo e($product->sku); ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>
@@ -377,7 +377,7 @@
                                 <?php if($order->order_status=='new'){ ?>
                                 <button type="submit" class="btn btn-primary pull-right">Update</button>
                                 <?php } else { ?>
-                                <a href="{{url('admin/orders')}}" class="btn btn-primary pull-right">Back</a>
+                                <a href="<?php echo e(url('admin/orders')); ?>" class="btn btn-primary pull-right">Back</a>
 
                             <?php } ?>
                             </div>
@@ -455,7 +455,7 @@
                             "_token": _token
 
                         },
-                        url: "{{  route('productSelectionChange')}} ",
+                        url: "<?php echo e(route('productSelectionChange')); ?> ",
                         success: function (result) {
                             //  alert('success');
                             console.log('success')
@@ -499,7 +499,7 @@
                             _token: _token
                         },
 
-                        url: "{{  route('productSelection')}} ",
+                        url: "<?php echo e(route('productSelection')); ?> ",
                         success: function (result) {
 
                             //  alert('success');
@@ -522,13 +522,15 @@
 
             <script>
 
-                document.forms['product'].elements['order_status'].value = "{{$order->order_status}}";
-                document.forms['product'].elements['courier_service'].value = "{{$order->courier_service}}";
+                document.forms['product'].elements['order_status'].value = "<?php echo e($order->order_status); ?>";
+                document.forms['product'].elements['courier_service'].value = "<?php echo e($order->courier_service); ?>";
 
 
             </script>
 
 
-@endsection
+<?php $__env->stopSection(); ?>
 
 
+
+<?php echo $__env->make('layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Xampp\htdocs\money_transfer\resources\views/admin/order/edit.blade.php ENDPATH**/ ?>
