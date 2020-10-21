@@ -90,7 +90,7 @@
                     <div class="col-md-4 inputGroupContainer">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                            <input  name="email" placeholder="E-Mail Address" class="form-control"  type="email">
+                            <input  name="email" placeholder="E-Mail Address" class="form-control" value="<?php echo e(old('email')); ?>" type="email">
                         </div>
                     </div>
                     <?php if($errors->has('email')): ?>

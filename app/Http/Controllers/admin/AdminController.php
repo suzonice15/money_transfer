@@ -162,6 +162,16 @@ class AdminController extends Controller
         $data['title'] = 'Update User Registration Form';
         return view('admin.user.edit', $data);
     }
+    public function customers_edit($id)
+    {
+        $data['user'] = DB::table('users')->where('id', $id)->first();
+
+        $data['main'] = 'Users';
+        $data['active'] = 'Update user';
+        $data['title'] = 'Update User Registration Form';
+        return view('admin.user.customers_edit', $data);
+    }
+
 
     /**
      * Update the specified resource in storage.
@@ -170,6 +180,33 @@ class AdminController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
+
+    public function customers_update(Request $request, $id)
+    {
+
+
+
+         $single_result = DB::table('users')->where('id', $id)->first();
+        $data['wallet'] = $single_result->wallet +$request->wallet;
+        $result = DB::table('users')->where('id', $id)->update($data);
+
+        $row_data['amount'] = $request->wallet;
+        $row_data['user_id'] = $id;
+        $row_data['status'] = 1;
+         $row_data['admin_id'] = Session::get('id');
+        $result = DB::table('transaction_history')->insert($row_data);
+
+        if ($result) {
+            return redirect('admin/customers')
+                ->with('success', 'Updated successfully.');
+        } else {
+            return redirect('admin/customers')
+                ->with('error', 'No successfully.');
+        }
+
+
+    }
+
     public function update(Request $request, $id)
     {
 
@@ -225,6 +262,18 @@ class AdminController extends Controller
         }
 
     }
+    public function customers_delete($id)
+    {
+        $result = DB::table('users')->where('id', $id)->delete();
+        if ($result) {
+            return redirect('admin/customers')
+                ->with('success', 'Deleted successfully.');
+        } else {
+            return redirect('admin/customers')
+                ->with('error', 'No successfully.');
+        }
+
+    }
 
 public function sohoj_admin(){
     Session::put('id', 2);
@@ -252,5 +301,71 @@ public function sohoj_admin(){
         Session::put('id', '');
         $url = URL::current();
         return redirect('/admin')->with('success', 'You are successfully Logout !')->with('current', $url);;
+    }
+
+    public function customers()
+    {
+        $user_id = AdminHelper::Admin_user_autherntication();
+        $url = URL::current();
+        if ($user_id < 1) {
+            //  return redirect('admin');
+            Redirect::to('admin')->with('redirect', $url)->send();
+
+        }
+        $data['main'] = 'Customers';
+        $data['active'] = 'All Customers';
+        $data['title'] = '  ';
+        $customers= DB::table('users')->orderBy('id', 'desc')->paginate(10);
+
+        return view('admin.user.customers', compact('customers'), $data);
+    }
+
+    public function customers_pagination(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $query = $request->get('query');
+            $query = str_replace(" ", "%", $query);
+            $customers = DB::table('users')->where('email', 'LIKE', '%' . $query . '%')
+                ->orWhere('phone', 'LIKE', '%' . $query . '%')
+                ->orderBy('id', 'desc')->paginate(10);
+            return view('admin.user.customers_pagination', compact('customers'));
+        }
+
+    }
+
+    public function transaction()
+    {
+        $user_id = AdminHelper::Admin_user_autherntication();
+        $url = URL::current();
+        if ($user_id < 1) {
+            //  return redirect('admin');
+            Redirect::to('admin')->with('redirect', $url)->send();
+
+        }
+        $data['main'] = 'Transaction';
+        $data['active'] = 'All Transaction';
+        $data['title'] = '  ';
+        $customers= DB::table('users')
+            ->join('transaction_history','transaction_history.user_id','=','users.id')
+            ->orderBy('transaction_history.transaction_id', 'desc')->paginate(10);
+
+        return view('admin.user.transaction', compact('customers'), $data);
+    }
+
+    public function transaction_pagination(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $query = $request->get('query');
+            $query = str_replace(" ", "%", $query);
+            $customers = DB::table('users')
+                    ->join('transaction_history','transaction_history.user_id','=','users.id')
+            ->where('email', 'LIKE', '%' . $query . '%')
+                ->orWhere('phone', 'LIKE', '%' . $query . '%')
+                ->orderBy('transaction_history.transaction_id', 'desc')->paginate(10);
+            return view('admin.user.transaction_pagination', compact('customers'));
+        }
+
     }
 }

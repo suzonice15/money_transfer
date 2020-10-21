@@ -49,12 +49,19 @@ Route::get('/dashboard', 'admin\DashboardController@index');
 /****=============== admin section    =====================  ******/
 
 Route::get('admin/users', 'admin\AdminController@index');
+Route::get('admin/customers', 'admin\AdminController@customers');
 Route::get('admin/user/create', 'admin\AdminController@create');
 Route::post('admin/user/store', 'admin\AdminController@store');
 Route::post('admin/user/update/{id}', 'admin\AdminController@update');
+Route::post('admin/customers/update/{id}', 'admin\AdminController@customers_update');
 Route::get('admin/user/{id}', 'admin\AdminController@edit');
+Route::get('/admin/customers/edit/{id}', 'admin\AdminController@customers_edit');
 Route::get('/admin/user/delete/{id}', 'admin\AdminController@delete');
+Route::get('admin/customers/delete/{id}', 'admin\AdminController@customers_delete');
 Route::get('logout', 'admin\AdminController@logout');
+Route::get('customers/pagination', 'admin\AdminController@customers_pagination');
+Route::get('customers/transaction', 'admin\AdminController@transaction');
+Route::get('customers/transaction/pagination', 'admin\AdminController@transaction_pagination');
 
 /****=============== category section    =====================  ******/
 Route::get('admin/categories', 'admin\CategoryController@index');

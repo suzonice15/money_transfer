@@ -1,13 +1,13 @@
-@if(isset($orders))
+<?php if(isset($orders)): ?>
     <?php $i=$orders->perPage() * ($orders->currentPage()-1);?>
-    @foreach ($orders as $order)
+    <?php $__currentLoopData = $orders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $order): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <tr>
 
-            <td>{{ $order->order_id }}</td>
-            <td>{{ $order->customer_name }}</td>
-            <td><span class="btn btn-info">{{ $order->customer_phone }}</span></td>
-            <td><span class="btn btn-success">@if($order->order_area=='inside')
-                Inside Dhaka @else Outside Dhaka @endif
+            <td><?php echo e($order->order_id); ?></td>
+            <td><?php echo e($order->customer_name); ?></td>
+            <td><span class="btn btn-info"><?php echo e($order->customer_phone); ?></span></td>
+            <td><span class="btn btn-success"><?php if($order->order_area=='inside'): ?>
+                Inside Dhaka <?php else: ?> Outside Dhaka <?php endif; ?>
                 </span></td>
             <td> <?php
 
@@ -23,7 +23,7 @@
                         $name = $product->product_name;
 
                         ?>
-<a  target="_blank" href="{{URL::to('/'.'/'.$name)}}">
+<a  target="_blank" href="<?php echo e(URL::to('/'.'/'.$name)); ?>">
 
 
     <span class="btn btn-info" style="height: 29px; width:150px;display: block;overflow: hidden" ><?=($item['name'])?></span>
@@ -80,7 +80,7 @@
 
 
                 ?>
-                <a  target="_blank" href="{{URL::to('/admin/vendor/view'.'/'.$vendor_id)}}">
+                <a  target="_blank" href="<?php echo e(URL::to('/admin/vendor/view'.'/'.$vendor_id)); ?>">
                     <span class="btn btn-primary"><?php echo $vendor_result->vendor_f_name; ?></span>
                 </a>
                 <br>
@@ -102,60 +102,62 @@
             </td>
 
 
-            <td>{{$order->created_by}}</td>
+            <td><?php echo e($order->created_by); ?></td>
             <td><?php echo $affite_user ?></td>
-            <td> @money($order->order_total)
+            <td> <?php echo '৳ ' . number_format($order->order_total, 2); ?>
                 </td>
 
             <td>
                 <?php if($order->order_status=='pending_payment'){
                     ?>
 
-                <span   style="background-color:yellow">{{ $order->order_status }}</span>
+                <span   style="background-color:yellow"><?php echo e($order->order_status); ?></span>
                 <?php  } elseif ($order->order_status=='new') { ?>
-                    <span   class="btn btn-info">{{ $order->order_status }}</span>
+                    <span   class="btn btn-info"><?php echo e($order->order_status); ?></span>
 
                 <?php  } elseif ($order->order_status=='processing') { ?>
-                    <span   class="btn btn-info">{{ $order->order_status }}</span>
+                    <span   class="btn btn-info"><?php echo e($order->order_status); ?></span>
 
                 <?php  } elseif ($order->order_status=='on_courier') { ?>
 
-                    <span   class="btn btn-danger">{{ $order->order_status }}</span>
+                    <span   class="btn btn-danger"><?php echo e($order->order_status); ?></span>
                 <?php  } elseif ($order->order_status=='delivered') { ?>
-                    <span   class="btn btn-success">{{ $order->order_status }}</span>
+                    <span   class="btn btn-success"><?php echo e($order->order_status); ?></span>
 
                 <?php  } elseif ($order->order_status=='refund') { ?>
 
-                    <span   class="btn btn-danger">{{ $order->order_status }}</span>
+                    <span   class="btn btn-danger"><?php echo e($order->order_status); ?></span>
                 <?php  } elseif ($order->order_status=='cancled') { ?>
-                    <span   class="btn btn-danger">{{ $order->order_status }}</span>
+                    <span   class="btn btn-danger"><?php echo e($order->order_status); ?></span>
                 <?php } else {  ?>
 
-                    <span   class="btn btn-success">{{ $order->order_status }}</span>
+                    <span   class="btn btn-success"><?php echo e($order->order_status); ?></span>
                 <?php } ?>
 
 
             </td>
-            <td>{{date('d-F-Y H:i:s a',strtotime($order->created_time))}}</td>
+            <td><?php echo e(date('d-F-Y H:i:s a',strtotime($order->created_time))); ?></td>
 
             <td>
-                <a title="edit" href="{{ url('admin/order') }}/{{ $order->order_id }}">
+                <a title="edit" href="<?php echo e(url('admin/order')); ?>/<?php echo e($order->order_id); ?>">
                     <span class="glyphicon glyphicon-edit btn btn-success"></span>
                 </a>
 
-                {{--<a title="delete" href="{{ url('admin/product/delete') }}/{{ $order->product_id }}" onclick="return confirm('Are you want to delete this Product')">--}}
-                    {{--<span class="glyphicon glyphicon-trash btn btn-danger"></span>--}}
-                {{--</a>--}}
+                
+                    
+                
             </td>
         </tr>
 
-    @endforeach
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
     <tr>
         <td colspan="13" align="center">
-            {!! $orders->links() !!}
+            <?php echo $orders->links(); ?>
+
         </td>
     </tr>
-@endif
+<?php endif; ?>
 
 
+<?php /**PATH C:\Xampp\htdocs\money_transfer\resources\views/admin/order/pagination.blade.php ENDPATH**/ ?>
