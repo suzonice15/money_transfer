@@ -94,26 +94,9 @@
 
                 </ul>
             </li>
-
-            
-                
-                    
-                    
-                    
-              
-            
-                
-                
-                    
-                    
-                    
-                    
-                    
-                    
+            <li><a href=" <?php echo e(url('customers/transaction')); ?>"><i class="fa fa-circle-o"></i>Transaction</a></li>
 
 
-                
-            
 
             <li class="treeview active">
                 <a href="#">
@@ -127,7 +110,6 @@
                     <li><a href=" <?php echo e(url('admin/user/create')); ?>"><i class="fa fa-circle-o"></i>Create User</a></li>
                     <li><a href=" <?php echo e(url('admin/users')); ?>"><i class="fa fa-circle-o"></i>All Users</a></li>
                     <li><a href=" <?php echo e(url('admin/customers')); ?>"><i class="fa fa-circle-o"></i>Customers</a></li>
-                    <li><a href=" <?php echo e(url('customers/transaction')); ?>"><i class="fa fa-circle-o"></i>Transaction</a></li>
 
 
                 </ul>

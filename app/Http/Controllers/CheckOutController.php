@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use DB;
 use  Cart;
 use Illuminate\Support\Facades\Cookie;
+use Session;
 
 class CheckOutController extends Controller
 {
@@ -29,7 +30,16 @@ class CheckOutController extends Controller
         return view('website.checkout',$data);
     }
     public  function checkoutStore(Request $request){
-         $data['order_status'] ='new';
+
+        $user_id=Session::get('user_id');
+        $usr_row=DB::table('users')->where('id','=',$user_id)->first();
+       $wallet= $usr_row->wallet;
+       if($wallet < $request->order_total){
+           return redirect('/checkout')
+               ->with('error', 'You have insufficient blance to order this product please  contact with admin');
+       }
+
+        $data['order_status'] ='new';
         $data['shipping_charge'] = $request->shipping_charge;
         $data['created_time'] = date("Y-m-d h:i:s");
         $data['created_by'] = 'Customer';
@@ -46,10 +56,20 @@ class CheckOutController extends Controller
         $data['order_area'] = $request->order_area;
 
 
-        $data['user_id'] = 0;
+        $data['user_id']=Session::get('user_id');
+
         $order_id=DB::table('order_data')->insertGetId($data);
         $row_data['order_id']= $order_id;
         if($order_id){
+
+            $details = [
+                'status' => 'New Order',
+                'order_id' => $order_id
+            ];
+            Session::put('order_mail',$order_id);
+
+            \Mail::to($request->customer_email)->send(new \App\Mail\MyTestMail($details));
+
 
             return  redirect('thank-you?order_id='.$order_id);
         } else {

@@ -4,6 +4,8 @@
 $indhaka=get_option('shipping_charge_in_dhaka');
 $outdhaka=get_option('shipping_charge_out_of_dhaka');
 $delivery=$indhaka;
+$user_id=Session::get('user_id');
+$user_row=DB::table('users')->where('id',$user_id)->first();
 
                                             $items = \Cart::getContent();
                                             //Cart::clear();
@@ -21,14 +23,27 @@ $delivery=$indhaka;
 
 ?>
 <br/>
+
+<?php
+
+if($user_id){
+?>
     <div class="container-fluid">
 
         <div class="row">
             <?php
             if ( !Cart::isEmpty()){
             ?>
+
                 <form style="z-index: 10000000000" action="{{url('/chechout')}}" id="checkout" name="checkout" method="post">
                     @csrf
+                    <?php if(Session::get('error')) { ?>
+                    <div class="col-md-12">
+                    <div class="alert alert-danger" role="alert">
+                        {{ Session::get('error')}}
+                    </div>
+                    </div>
+                    <?php }?>
                 <div class="col-md-6">
 
                     <div class="panel panel-primary">
@@ -196,18 +211,18 @@ $delivery=$indhaka;
                                 <div class="form-group">
                                     <label for="billing_name"><b>Name</b></label>
                                     <span style="color:red;font-size: 18px;margin-top: -7px;position: absolute;">*</span>
-                                    <input required="" type="text" id="customer_name" name="customer_name" value="" class="form-control " placeholder="Type Your Name">
+                                    <input required="" type="text" id="customer_name" name="customer_name" value="{{$user_row->name}}" class="form-control " placeholder="Type Your Name">
                                 </div>
                                 <div class="form-group">
                                     <label for="billing_name"><b>Mobile</b></label>
                                     <span style="color:red;font-size: 18px;margin-top: -7px;position: absolute;">*</span>
-                                    <input required="" type="text" id="customer_phone" name="customer_phone" value="" class="form-control " placeholder="Type Your Mobile">
+                                    <input required="" type="text" id="customer_phone" name="customer_phone" value="{{$user_row->phone}}" class="form-control " placeholder="Type Your Mobile">
                                     <p id="customer_phone_error" class="text-danger"></p>
                                 </div>
                                 <div class="form-group" >
                                     <label for="billing_name"><b>Email</b></label>
 
-                                    <input type="text" name="customer_email" id="customer_email" value="" class="form-control " placeholder="Email">
+                                    <input type="text" name="customer_email" id="customer_email" value="{{$user_row->email}}" class="form-control " placeholder="Email">
                                     <p id="customer_email_error" class="text-danger"></p>
                                 </div>
                                 <div class="form-group">
@@ -226,7 +241,7 @@ $delivery=$indhaka;
                                 <div class="form-group">
                                     <label for="billing_name"><b>Delivery Address</b></label>
                                     <span style="color:red;font-size: 18px;margin-top: -7px;position: absolute;">*</span>
-                                    <textarea  required=""  name="customer_address"  class="form-control" placeholder="Type Your Address"></textarea>
+                                    <textarea  required=""  name="customer_address"  class="form-control" placeholder="Type Your Address">{{$user_row->address}}</textarea>
 
                                  </div>
 
@@ -257,6 +272,19 @@ $delivery=$indhaka;
 
 
     </div>
+
+<?php } else { ?>
+
+<div style="height: 450px">
+<center>
+
+    <h1 style="text-align: center">To Continue Checkout login first</h1>
+    <a class="btn btn-success" style="text-align:center" href="{{url('/')}}/customer/login">Login</a>
+
+</center>
+</div>
+
+<?php } ?>
 
 <script>
 

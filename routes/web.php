@@ -162,7 +162,18 @@ Route::post('customer/save', 'CustomerController@store');
 Route::get('customer/logout', 'CustomerController@logout');
 Route::post('customer/login', 'CustomerController@login_check');
 
+Route::get('send-mail', function () {
 
+    $details = [
+        'title' => 'Mail from ItSolutionStuff.com',
+        'body' => 'This is for testing email using smtp',
+        'order_id' => 10
+    ];
+
+    \Mail::to('suzonice15@gmail.com')->send(new \App\Mail\MyTestMail($details));
+
+    dd("Email is Sent.");
+});
 Route::get('/clear-cache', function() {
     Artisan::call('cache:clear');
     return redirect('dashboard');

@@ -76,10 +76,10 @@
 
                                         <div class="form-group ">
                                             <label for="billing_name">Name </label>
-
-
                                             <input class="form-control" type="text" name="customer_name"
                                                    value="<?php echo $order->customer_name; ?>"/>
+                                            <input class="form-control" type="hidden" name="user_id"
+                                                   value="<?php echo $order->user_id; ?>"/>
                                         </div>
 
 

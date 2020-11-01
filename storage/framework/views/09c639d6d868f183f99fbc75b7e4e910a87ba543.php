@@ -6,6 +6,7 @@
     <?php
 
 
+    $user_id=Session::get('user_id');
 
 
             if(isset($page_title)){
@@ -130,8 +131,18 @@
                         <li><a href="<?php echo e(url('/track-your-order')); ?>"><i class="icon fa fa-search"></i>Track Order</a></li>
                         
                         <li><a href="<?php echo e(url('/cart')); ?>"><i class="icon fa fa-shopping-cart"></i>My Cart</a></li>
-                        <li><a href="<?php echo e(URL::to('/customer/form')); ?>"><i class="icon fa fa-lock"></i>customer form</a></li>
+                        <li><a href="<?php echo e(url('/checkout')); ?>"><i class="icon fa fa-shopping-cart"></i>Checkout</a></li>
+
+                        <?php
+
+                        if($user_id){
+                        ?>
+                         <li><a href="<?php echo e(URL::to('/customer/login')); ?>"><i class="icon fa fa-lock"></i>Dashboard</a></li>
+                   <?php } else { ?>
                         <li><a href="<?php echo e(URL::to('/customer/login')); ?>"><i class="icon fa fa-lock"></i>Login</a></li>
+
+                    <?php }?>
+
                     </ul>
                 </div>
 

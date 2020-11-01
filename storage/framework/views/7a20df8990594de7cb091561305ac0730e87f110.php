@@ -164,7 +164,7 @@
                     <label class="col-md-4 control-label"></label>
                     <div class="col-md-4"><br>
                         <button type="submit" class="btn btn-info" >Register <span class="glyphicon glyphicon-send"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</button>
-                        <a href="<?php echo e(url('/vendor/login')); ?>" class="btn btn-success">Already Account</a>
+                        <a href="<?php echo e(url('/customer/login')); ?>" class="btn btn-success">Already Account</a>
                     </div>
                 </div>
 
